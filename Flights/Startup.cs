@@ -1,6 +1,7 @@
 using AutoMapper;
 using Flights.Application._Related;
 using Flights.Domain;
+using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -91,6 +92,8 @@ namespace Flights
               .AddRazorRuntimeCompilation();
 
             services.AddAutoMapper(Assembly.GetExecutingAssembly());
+
+            services.AddMediatR(typeof(Startup).GetTypeInfo().Assembly);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

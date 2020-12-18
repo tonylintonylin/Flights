@@ -1,104 +1,72 @@
 using Flights.Domain;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using System;
-using System.Linq;
-using System.Threading.Tasks;
+using MediatR;
+using System.Collections.Generic;
 
 namespace Flights.Application.Travelers
 {
-    public class List : PagedModel<Detail>
+    // ** Command Query pattern
+
+    public class List
     {
-        #region Data
+        // Input (DTO Pattern)
 
-        public int Id { get; set; }
-        public string Name { get; set; }
-        public string FirstName { get; set; }
-        public string LastName { get; set; }
-        public string Email { get; set; }
-        public string City { get; set; }
-        public string Country { get; set; }
-        public int TotalBookings { get; set; }
+        public class Query : IRequest<Result> { }
 
-        #endregion
+        // Output (DTO Pattern)
 
-        #region Handlers
-
-        public override async Task<IActionResult> GetAsync()
+        public class Result
         {
-            var query = BuildQuery();
+            public List<Traveler> Travelers { get; set; } = new List<Traveler>();
 
-            TotalRows = await query.CountAsync();
-            var items = await query.Skip(Skip).Take(Take).ToListAsync();
-
-            _mapper.Map(items, Items);
-
-            return View(this);
+            public class Traveler
+            {
+                public int Id { get; set; }
+                public string Name { get; set; }
+                public string FirstName { get; set; }
+                public string LastName { get; set; }
+                public string Email { get; set; }
+                public string City { get; set; }
+                public string Country { get; set; }
+                public int TotalBookings { get; set; }
+            }
         }
 
-        #endregion
+        // Process
 
-        #region Helpers
-
-        protected IQueryable<Traveler> BuildQuery()
+        public class QueryHandler : RequestHandler<Query, Result>
         {
-            var query = _db.Traveler.AsQueryable();
+            // ** DI Pattern
 
-            // Filters
+            private readonly FlightsContext _db;
 
-            if (AdvancedFilter)
+            public QueryHandler(FlightsContext db)
             {
-                if (Name != null)
-                {
-                    query = query.Where(c => c.Name.Contains(Name));
-                }
-
-                if (Email != null)
-                {
-                    query = query.Where(c => c.Email == Email);
-                }
-
-                if (City != null)
-                {
-                    query = query.Where(c => c.City == City);
-                }
-            }
-            else
-            {
-                switch (Filter)
-                {
-                    case 1: query = query.Where(c => _viewedService.GetIds("Traveler").Contains(c.Id)); break;
-                }
+                _db = db;
             }
 
-            // Sorting
-
-            query = Sort switch
+            protected override Result Handle(Query request)
             {
-                "Id" => query.OrderBy(c => c.Id),
-                "-Id" => query.OrderByDescending(c => c.Id),
-                "FirstName" => query.OrderBy(c => c.FirstName),
-                "-FirstName" => query.OrderByDescending(c => c.FirstName),
-                "LastName" => query.OrderBy(c => c.LastName),
-                "-LastName" => query.OrderByDescending(c => c.LastName),
-                "Email" => query.OrderBy(c => c.Email),
-                "-Email" => query.OrderByDescending(c => c.Email),
-                "City" => query.OrderBy(c => c.City),
-                "-City" => query.OrderByDescending(c => c.City),
-                "Country" => query.OrderBy(c => c.Country),
-                "-Country" => query.OrderByDescending(c => c.Country),
-                _ => query.OrderByDescending(c => c.Id),
-            };
+                var result = new Result();
 
-            return query;
+                foreach (var traveler in _db.Traveler)
+                {
+                    // ** Data Mapper pattern
+
+                    result.Travelers.Add(new Result.Traveler
+                    {
+                        Id = traveler.Id,
+                        Name = traveler.Name,
+                        FirstName = traveler.FirstName,
+                        LastName = traveler.LastName,
+                        Email = traveler.Email,
+                        City = traveler.City,
+                        Country = traveler.Country,
+                        TotalBookings = traveler.TotalBookings
+                    });
+                }
+
+                return result;
+            }
         }
-
-        #endregion
-
-        #region Mapping
-
-        // Mappings are already defined in the associated Detail.cs page
-
-        #endregion
     }
 }

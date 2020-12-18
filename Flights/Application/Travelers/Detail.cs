@@ -1,38 +1,68 @@
-using Flights.Application._Related;
 using Flights.Domain;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using System;
+using MediatR;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace Flights.Application.Travelers
 {
-    public class Detail : BaseModel
+    // ** Command Query pattern
+
+    public class Detail
     {
-        #region Data
+        // Input 
 
-        public int? Id { get; set; }
-        public string Name { get; set; }
-        public string FirstName { get; set; }
-        public string LastName { get; set; }
-        public string Email { get; set; }
-        public string City { get; set; }
-        public string Country { get; set; }
-        public int TotalBookings { get; set; }
-
-        #endregion
-
-        #region Handlers
-
-        public override async Task<IActionResult> GetAsync()
+        public class Query : IRequest<Result>
         {
-            var traveler = await _db.Traveler.SingleOrDefaultAsync(c => c.Id == Id);
-            _mapper.Map(traveler, this);
-
-            return View(this);
+            public int? Id { get; set; }
         }
 
-        #endregion
+        // Output
+
+        public class Result
+        {
+            public int? Id { get; set; }
+            public string Name { get; set; }
+            public string FirstName { get; set; }
+            public string LastName { get; set; }
+            public string Email { get; set; }
+            public string City { get; set; }
+            public string Country { get; set; }
+            public int TotalBookings { get; set; }
+        }
+
+        // Process
+
+        public class QueryHandler : RequestHandler<Query, Result>
+        {
+            // ** DI Pattern
+
+            private readonly FlightsContext _db;
+
+            public QueryHandler(FlightsContext db)
+            {
+                _db = db;
+            }
+
+            protected override Result Handle(Query query)
+            {
+                var result = new Result();
+                var traveler = _db.Traveler.SingleOrDefault(p => p.Id == query.Id);
+
+                if (traveler != null)
+                {
+                    // ** Data Mapper pattern
+
+                    result.Id = traveler.Id;
+                    result.Name = traveler.Name;
+                    result.FirstName = traveler.FirstName;
+                    result.LastName = traveler.LastName;
+                    result.Email = traveler.Email;
+                    result.City = traveler.City;
+                    result.Country = traveler.Country;
+                    result.TotalBookings = traveler.TotalBookings;
+                }
+
+                return result;
+            }
+        }
     }
 }

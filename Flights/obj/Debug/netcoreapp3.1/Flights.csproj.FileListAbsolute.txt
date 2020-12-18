@@ -425,3 +425,5 @@ C:\Users\tonyl\Desktop\Flights\Flights\obj\Debug\netcoreapp3.1\Flights.dll
 C:\Users\tonyl\Desktop\Flights\Flights\obj\Debug\netcoreapp3.1\Flights.pdb
 C:\Users\tonyl\Desktop\Flights\Flights\obj\Debug\netcoreapp3.1\Flights.genruntimeconfig.cache
 C:\Users\tonyl\Desktop\Flights\Flights\obj\Debug\netcoreapp3.1\Razor\Application\Travelers\List.cshtml.g.cs
+C:\Users\tonyl\Desktop\Flights\Flights\bin\Debug\netcoreapp3.1\MediatR.dll
+C:\Users\tonyl\Desktop\Flights\Flights\bin\Debug\netcoreapp3.1\MediatR.Extensions.Microsoft.DependencyInjection.dll

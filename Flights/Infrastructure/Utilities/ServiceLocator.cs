@@ -2,10 +2,6 @@
 
 namespace Flights
 {
-    // ** Service locator pattern.
-
-    // Gets the registered services directly from the container, without constructor injection. 
-
     public static class ServiceLocator
     {
         private static IHttpContextAccessor _httpContextAccessor;

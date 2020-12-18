@@ -15099,6 +15099,11 @@
       "FileKind": "mvc"
     },
     {
+      "FilePath": "c:\\Users\\tonyl\\Desktop\\Flights\\Flights\\Application\\Travelers\\Edit.cshtml",
+      "TargetPath": "Application\\Travelers\\Edit.cshtml",
+      "FileKind": "mvc"
+    },
+    {
       "FilePath": "c:\\Users\\tonyl\\Desktop\\Flights\\Flights\\Application\\Auth\\Reset.cshtml",
       "TargetPath": "Application\\Auth\\Reset.cshtml",
       "FileKind": "mvc"

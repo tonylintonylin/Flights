@@ -106,8 +106,6 @@ namespace Flights
         {
             get
             {
-                // ** Lazy load pattern 
-
                 var dictionary = _memoryCache.Get(MetaTypesKey) as Dictionary<string, MetaType>;
                 if (dictionary == null)
                 {
@@ -147,8 +145,6 @@ namespace Flights
         {
             get
             {
-                // ** Lazy Load pattern 
-
                 if (!(_memoryCache.Get(SeatsKey) is Dictionary<int, Seat> dictionary))
                 {
                     lock (locker)
@@ -200,8 +196,6 @@ namespace Flights
         {
             get
             {
-                // ** Lazy Load pattern 
-
                 if (!(_memoryCache.Get(TravelersKey) is Dictionary<int, Traveler> dictionary))
                 {
                     lock (locker)
@@ -304,8 +298,6 @@ namespace Flights
         {
             get
             {
-                // ** Lazy load pattern 
-
                 if (!(_memoryCache.Get(ProjectsKey) is Dictionary<int, Project> dictionary))
                 {
                     lock (locker)
@@ -355,8 +347,6 @@ namespace Flights
         {
             get
             {
-                // ** Lazy load pattern 
-
                 if (!(_memoryCache.Get(IssuesKey) is Dictionary<int, Issue> dictionary))
                 {
                     lock (locker)
@@ -406,8 +396,6 @@ namespace Flights
         {
             get
             {
-                // ** Lazy load pattern 
-
                 if (!(_memoryCache.Get(UsersKey) is Dictionary<int, User> dictionary))
                 {
                     lock (locker)

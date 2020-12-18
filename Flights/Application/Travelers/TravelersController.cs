@@ -28,28 +28,28 @@ namespace Flights.Application.Travelers
             return View(model);
         }
 
-        // [HttpGet("edit/{id?}")]
-        // public async Task<IActionResult> Edit([FromRoute]Edit.Query query)
-        // {
-        //     var model = await _mediator.Send(query);
-        //     return View(model);
-        // }
+        [HttpGet("edit/{id?}")]
+        public async Task<IActionResult> Edit([FromRoute]Edit.Query query)
+        {
+            var model = await _mediator.Send(query);
+            return View(model);
+        }
 
-        // #endregion
+        #endregion
 
-        // #region Commands
+        #region Commands
 
-        // [HttpPost("edit/{id?}")]
-        // public async Task<IActionResult> Edit([FromForm]Edit.Command command)
-        // {
-        //     if (ModelState.IsValid)
-        //     {
-        //         await _mediator.Send(command);
-        //         return RedirectToAction("List");
-        //     }
+        [HttpPost("edit/{id?}")]
+        public async Task<IActionResult> Edit([FromForm]Edit.Command command)
+        {
+            if (ModelState.IsValid)
+            {
+                await _mediator.Send(command);
+                return RedirectToAction("List");
+            }
 
-        //     return View(command);
-        // }
+            return View(command);
+        }
 
         // [HttpPost("delete")]
         // public async Task<IActionResult> Delete([FromForm]Delete.Command command)

@@ -4,15 +4,13 @@ using System.Collections.Generic;
 
 namespace Flights.Application.Travelers
 {
-    // ** Command Query pattern
-
     public class List
     {
-        // Input (DTO Pattern)
+        // Input
 
         public class Query : IRequest<Result> { }
 
-        // Output (DTO Pattern)
+        // Output
 
         public class Result
         {
@@ -35,8 +33,6 @@ namespace Flights.Application.Travelers
 
         public class QueryHandler : RequestHandler<Query, Result>
         {
-            // ** DI Pattern
-
             private readonly FlightsContext _db;
 
             public QueryHandler(FlightsContext db)
@@ -50,8 +46,6 @@ namespace Flights.Application.Travelers
 
                 foreach (var traveler in _db.Traveler)
                 {
-                    // ** Data Mapper pattern
-
                     result.Travelers.Add(new Result.Traveler
                     {
                         Id = traveler.Id,

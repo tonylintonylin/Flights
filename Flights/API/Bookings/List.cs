@@ -5,8 +5,6 @@ using System.Linq;
 
 namespace Flights.API
 {
-    // ** Command Query pattern
-
     public class List
     {
         // Input

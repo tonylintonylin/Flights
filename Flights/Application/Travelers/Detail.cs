@@ -4,8 +4,6 @@ using System.Linq;
 
 namespace Flights.Application.Travelers
 {
-    // ** Command Query pattern
-
     public class Detail
     {
         // Input 
@@ -29,12 +27,8 @@ namespace Flights.Application.Travelers
             public int TotalBookings { get; set; }
         }
 
-        // Process
-
         public class QueryHandler : RequestHandler<Query, Result>
         {
-            // ** DI Pattern
-
             private readonly FlightsContext _db;
 
             public QueryHandler(FlightsContext db)
@@ -49,8 +43,6 @@ namespace Flights.Application.Travelers
 
                 if (traveler != null)
                 {
-                    // ** Data Mapper pattern
-
                     result.Id = traveler.Id;
                     result.Name = traveler.Name;
                     result.FirstName = traveler.FirstName;

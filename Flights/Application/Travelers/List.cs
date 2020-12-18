@@ -40,7 +40,7 @@ namespace Flights.Application.Travelers
 
         #region Helpers
 
-        protected IQueryable<Project> BuildQuery()
+        protected IQueryable<Traveler> BuildQuery()
         {
             var query = _db.Traveler.AsQueryable();
 
@@ -53,22 +53,21 @@ namespace Flights.Application.Travelers
                     query = query.Where(c => c.Name.Contains(Name));
                 }
 
-                if (Type != null)
+                if (Email != null)
                 {
-                    query = query.Where(c => c.Type == Type);
+                    query = query.Where(c => c.Email == Email);
                 }
 
-                if (OwnerId != null)
+                if (City != null)
                 {
-                    query = query.Where(c => c.OwnerId == OwnerId.Value);
+                    query = query.Where(c => c.City == City);
                 }
             }
             else
             {
                 switch (Filter)
                 {
-                    case 1: query = query.Where(c => _viewedService.GetIds("Project").Contains(c.Id)); break;
-                    case 2: query = query.Where(c => c.OwnerId == _currentUser.Id); break;
+                    case 1: query = query.Where(c => _viewedService.GetIds("Traveler").Contains(c.Id)); break;
                 }
             }
 
@@ -78,16 +77,16 @@ namespace Flights.Application.Travelers
             {
                 "Id" => query.OrderBy(c => c.Id),
                 "-Id" => query.OrderByDescending(c => c.Id),
-                "Title" => query.OrderBy(c => c.Title),
-                "-Title" => query.OrderByDescending(c => c.Title),
-                "Type" => query.OrderBy(c => c.Type),
-                "-Type" => query.OrderByDescending(c => c.Type),
-                "TotalIssues" => query.OrderBy(c => c.TotalIssues),
-                "-TotalIssues" => query.OrderByDescending(c => c.TotalIssues),
-                "OwnerAlias" => query.OrderBy(c => c.OwnerAlias),
-                "-OwnerAlias" => query.OrderByDescending(c => c.OwnerAlias),
-                "CreatedDate" => query.OrderBy(c => c.CreatedDate),
-                "-CreatedDate" => query.OrderByDescending(c => c.CreatedDate),
+                "FirstName" => query.OrderBy(c => c.FirstName),
+                "-FirstName" => query.OrderByDescending(c => c.FirstName),
+                "LastName" => query.OrderBy(c => c.LastName),
+                "-LastName" => query.OrderByDescending(c => c.LastName),
+                "Email" => query.OrderBy(c => c.Email),
+                "-Email" => query.OrderByDescending(c => c.Email),
+                "City" => query.OrderBy(c => c.City),
+                "-City" => query.OrderByDescending(c => c.City),
+                "Country" => query.OrderBy(c => c.Country),
+                "-Country" => query.OrderByDescending(c => c.Country),
                 _ => query.OrderByDescending(c => c.Id),
             };
 

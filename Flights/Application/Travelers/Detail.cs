@@ -27,28 +27,10 @@ namespace Flights.Application.Travelers
 
         public override async Task<IActionResult> GetAsync()
         {
-            var project = await _db.Project.SingleOrDefaultAsync(c => c.Id == Id);
-            _mapper.Map(project, this);
-            
-            var issues = await _db.Issue.Where(o => o.ProjectId == project.Id).OrderByDescending(o => o.Id).Take(6).ToListAsync();
-            _related.Prepare(issues, Issues, project.TotalIssues, project.Id, project.Title);
-            
-            await _viewedService.Log(Id, "Project", project.Title);
+            var traveler = await _db.Traveler.SingleOrDefaultAsync(c => c.Id == Id);
+            _mapper.Map(traveler, this);
 
             return View(this);
-        }
-
-        #endregion
-
-        #region Mapping
-
-        public class MapperProfile : BaseProfile
-        {
-            public MapperProfile()
-            {
-                CreateMap<Project, Detail>()
-                  .Map(dest => dest.OwnerName, opt => opt.MapFrom(src => _cache.Users[src.OwnerId].Name));
-            }
         }
 
         #endregion

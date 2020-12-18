@@ -51,12 +51,12 @@ namespace Flights.Application.Travelers
             return View(command);
         }
 
-        // [HttpPost("delete")]
-        // public async Task<IActionResult> Delete([FromForm]Delete.Command command)
-        // {
-        //     await _mediator.Send(command);
-        //     return RedirectToAction("List");
-        // }
+        [HttpPost("delete")]
+        public async Task<IActionResult> Delete([FromForm]Delete.Command command)
+        {
+            await _mediator.Send(command);
+            return RedirectToAction("List");
+        }
 
         #endregion
     }

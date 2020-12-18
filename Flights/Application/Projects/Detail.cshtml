@@ -1,0 +1,73 @@
+@model Flights.Application.Projects.Detail
+@{ 
+    ViewBag.Title = "Project Details";
+    string issues = $"<span class='tab-badge'>{Model.TotalIssues}</span>";
+}
+
+<div class="page-box d-flex">
+
+    <div>
+        <div class="page-box-icon"><a href="/projects"><i class="@Cache.ProjectIcon"></i></a> Project</div>
+        <div class="page-box-name">@Model.Title</div>
+    </div>
+
+    <div class="d-flex">
+        <div class=" page-box-data-first">Total Issues<br />@Model.TotalIssues</div>
+        <div class=" page-box-data">Type<br />@Model.Type</div>
+        <div class=" page-box-data-last">Created On<br />@Model.CreatedDate</div>
+    </div>
+    <div class="ml-auto">
+        <div class="page-box-buttons">
+            <a class="btn btn-sm btn-light js-edit" href="/projects/edit/@Model.Id">Edit</a>
+            <a class="btn btn-sm btn-light js-delete" href="/projects/delete" data-return-url="/projects" data-id="@Model.Id" 
+               data-dependencies="@Model.TotalIssues">Delete</a>
+        </div>
+    </div>
+</div>
+
+<div class="tabs">
+    <ul class="nav nav-tabs nav-tabs-related">
+        <li class='nav-item'><a class='nav-link @(Model.Tab == "details" ? "active" : "")' data-toggle="tab" href="#details">Details</a></li>
+        <li class='nav-item'><a class='nav-link @(Model.Tab == "issues" ? "active" : "")' data-toggle="tab" href="#issues">Issues @(Html.Raw(issues))</a></li>
+    </ul>
+</div>
+
+<div class="tab-content">
+
+    <div class='tab-pane @(Model.Tab == "details" ? "active" : "")' id="details">
+        <div class="tab-pane-row row">
+
+            <div class="col-12 col-md-6">
+                <outputField value="Title"></outputField>
+                <outputField value="Description"></outputField>
+            </div>
+
+            <div class="col-12 col-md-6">
+                <outputLink value="OwnerId" name="OwnerName" type="Owner" label="Project Lead"></outputLink>
+                <outputField value="CreatedDate" label="Created On"></outputField>
+                <outputField value="TotalIssues" label="Total Issues"></outputField>
+                <outputField value="Type" label="Type"></outputField>
+            </div>
+        </div>
+    </div>
+
+    <div class='tab-pane @(Model.Tab == "issues" ? "active" : "")' id="issues">
+        <partial name="_Issue" model="Model.Issues" />
+    </div>
+
+
+</div>
+
+<br />
+<br />
+<br />
+<br />
+
+@section Scripts
+    {
+    <script>
+        $(function () {
+
+        });
+    </script>
+}

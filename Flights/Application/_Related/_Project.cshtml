@@ -1,0 +1,46 @@
+@model Flights.Application._Related._Projects
+
+<div class="d-flex related-header">
+    <div class=" related-icon"><i class="@Cache.ProjectIcon"></i></div>
+    <div class=" related-text">Projects (@Model.TotalProjects)</div>
+    <div class=" related-viewall">
+        @if (Model.TotalProjects > 4)
+        {
+            <a href="/projects?AdvancedFilter=True&@Model.ParentIdName=@Model.ParentId">View All</a>
+        }
+    </div>
+
+    <div class="ml-auto related-new"><a class="btn btn-sm btn-light" href="/projects/edit?@(Model.ParentIdName)Id=@(Model.ParentId)&@(Model.ParentIdName)Name=@(Model.ParentName)"> New </a></div>
+</div>
+
+<div class="related-items">
+    @if (Model.Projects.Count == 0)
+    {
+        @:No related Projects
+    }
+    else
+    {
+        <div class="row">
+            @foreach (var item in Model.Projects)
+            {
+                <div class="col-3">
+                    <div class="pb-15"><a class="underline" href="/projects/@item.Id?tab=details">@item.Title</a></div>
+                    <table class="table-related">
+                        <tr>
+                            <td>Type</td>
+                            <td>@item.Type</td>
+                        </tr>
+                        <tr>
+                            <td colspan="2" class="py-15">
+                                <a class="btn btn-xs btn-light" href="/projects/edit/@item.Id">Edit</a>&nbsp;
+                                <a class="btn btn-xs btn-light js-delete" href="/projects/delete" data-id="@item.Id"
+                                   data-dependencies="@item.TotalIssues">Delete</a>&nbsp; &nbsp;
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            }
+        </div>
+    }
+</div>
+

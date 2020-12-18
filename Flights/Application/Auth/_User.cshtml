@@ -1,0 +1,13 @@
+@model Flights.Application.Auth._User
+
+<div class="login-card" data-email="@Model.Email" data-pwd="@Model.Password">
+    <div class="col-3">
+        <table class="login-table">
+            <tr><td>User</td><td>@Model.User</td></tr>
+            <tr><td>Email</td><td>@Model.Email</td></tr>
+            <tr><td>Password</td><td>@Model.Password</td></tr>
+            <tr><td>Role</td><td>@Model.Role</td></tr>
+        </table>
+    </div>
+</div>
+<br />

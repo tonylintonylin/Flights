@@ -1,0 +1,120 @@
+﻿@model Flights.Application.Home.List
+@{
+    ViewBag.Title = "Home";
+
+    int viewCount = 1;
+    int projectCount = 1;
+}
+
+<div class="page-box">
+    <div class="page-box-icon"> &nbsp;Dashboard</div>
+</div>
+
+<div class="row">
+    <div class="col">
+        <a class="no-underline" data-toggle="tooltip" title="Click for Details" href="/issues?Sort=Status">            <div class="callout" style="background:#20A8D8;">
+                <div class="callout-stage">Completed Issues</div>
+                <div class="row callout-body">
+                    <div class="col-5 callout-amount">@Model.CompletedIssues</div>
+                </div>
+            </div>
+        </a>
+    </div>
+    <div class="col">
+        <a class="no-underline" data-toggle="tooltip" title="Click for Details" href="/issues?Sort=-Status">
+            <div class="callout" style="background:#63C2DE;">
+                <div class="callout-stage">New Issues</div>
+                <div class="row callout-body">
+                    <div class="col-5 callout-amount">@Model.NewIssues</div>
+                </div>
+            </div>
+        </a>
+    </div>
+    <div class="col">
+        <a class="no-underline" data-toggle="tooltip" title="Click for Details" href="/projects">
+            <div class="callout" style="background:#C39B77;">
+                <div class="callout-stage">Projects in Progress</div>
+                <div class="row callout-body">
+                    <div class="col-5 callout-amount">@Model.OpenProjects</div>
+                </div>
+            </div>
+        </a>
+    </div>
+    <div class="col">
+        <a class="no-underline" data-toggle="tooltip" title="Click for Details" href="/issues?AdvancedFilter=True&Status=Urgent">
+            <div class="callout" style="background:#F86C6B;">
+                <div class="callout-stage">Issues</div>
+                <div class="row callout-body">
+                    <div class="col-5 callout-amount">@Model.IssueCount</div>
+                    <div class="col-7 text-right callout-items">@Model.UrgentIssues Urgent</div>
+                </div>
+            </div>
+        </a>
+    </div>
+</div>
+
+<div class="row pt-50">
+    <div class="col-12 col-md-6">  
+        <div class="py-7">Projects With Most Issues</div>
+        <table class="table table-sm table-hover">
+            @foreach (var item in Model.Projects)
+            {
+                <tr>
+                    <td class="width-50 font-20">
+                        @(projectCount).
+                    </td>
+                    <td class="py-5">
+                        <div>Project: <a class="table-list-link" href="/projects/@item.Id?tab=details">@item.Title</a></div>
+                        <div class="d-flex">
+                            <div class="width-150">Led By: @item.OwnerAlias
+                            </div>
+                            <div class="pr-30">Type: @item.Type</div>
+                            @if(int.Parse(item.TotalIssues) > 0){
+                                <div>@item.TotalIssues Issues</div>
+                            }
+                            else{
+                                <div>No issues</div>
+                            }
+                        </div>
+                    </td>
+                </tr>
+                projectCount++;
+            }
+        </table>
+    </div>
+    <div class="col-12 col-md-6">
+
+        <div class="py-7">Recently Viewed Projects & Issues</div>
+
+        <table class="table table-sm table-hover">
+            @foreach (var viewed in Model.Vieweds)
+            {
+                if (viewCount < 9)
+                {
+                    <tr>
+                        <td class="width-50">
+                            <a href="@viewed.Url"><i class="@viewed.Icon"></i></a>
+
+                        </td>
+                        <td class="pt-10">
+                            <a class="table-list-link" href="@viewed.Url">@viewed.Name</a>
+                        </td>
+                    </tr>
+                }
+                else
+                {
+                    <tr>
+                        <td colspan="2">
+                            <a href="/recents">View All</a>
+                        </td>
+                    </tr>
+                }
+                viewCount++;
+            }
+        </table>
+    </div>
+</div>
+<br />
+<br />
+<br />
+<br />

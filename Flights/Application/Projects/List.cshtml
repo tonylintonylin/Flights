@@ -1,0 +1,121 @@
+@model Flights.Application.Projects.List
+@{
+    ViewBag.Title = "Projects";
+    int index = 1;
+}
+
+<form>
+
+    <input asp-for="Page" type="hidden" />
+    <input asp-for="Sort" type="hidden" />
+    <input asp-for="AdvancedFilter" type="hidden" />
+
+    <div class="page-box">
+
+        <div class="d-flex">
+            <div class="page-box-icon">
+                <a href="/projects"><i class="@Cache.ProjectIcon"></i></a> Projects
+            </div>
+            <div class="ml-auto page-box-new-button-top">
+                <a class="btn btn-sm btn-light" href="/projects/edit"> New </a>
+                <a class="btn btn-sm btn-light" data-toggle="tooltip" title="Import from Excel" href="/projects/import">Import</a>
+                <a class="btn btn-sm btn-light js-export" data-toggle="tooltip" title="Export to Excel" href="/projects/export">Export</a>
+            </div>
+            <div class="btn-group filter-buttons" data-toggle="buttons">
+                <button type="button" class='standard-toggle btn btn-sm btn-light @(Model.AdvancedFilter ? "" : "active" )' title='Standard Filter'><i class="icon-list"></i></button>
+                <button type="button" class='advanced-toggle btn btn-sm btn-light @(Model.AdvancedFilter ? "active" : "" )' title='Advanced Filter'><img src="/images/filter.gif" /></button>
+            </div>
+        </div>
+
+        <div id="standard-filter" style='display:@(Model.AdvancedFilter ? "none" : "block")'>
+
+            <div class="d-flex">
+                <div class="page-box-filter">
+                    <select asp-for="Filter" asp-items="Filter.ProjectItems" class="form-control width-240"></select>
+                </div>
+                <div class=" page-box-items">@Model.TotalRows &nbsp;Items</div>
+            </div>
+
+        </div>
+
+
+        <div id="advanced-filter" style='display:@(Model.AdvancedFilter ? "block" : "none")'>
+            <div class="row mt-10 mb-7">
+                <div class="col-3">
+                    <inputTextBox value="Title" label="Title"></inputTextBox>
+                </div>
+                <div class="col-3">
+                    <inputSearch value="OwnerId" label="Lead" placeholder="Search Users.."></inputSearch>
+                </div>
+                <div class="col-4">
+                    <div class="pt-3 pl-30">
+                        <button class="btn btn-light btn-sm js-filter" type="submit"> Filter </button>&nbsp;
+                        <a href="/projects?AdvancedFilter=True" class="btn btn-light btn-sm"> Reset </a>
+                        <span class="page-box-items-advanced">@Model.TotalRows Items</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="">
+
+        <table class="table table-hover table-sm table-list">
+            <tr class="bg-light">
+                <th class="width-50">&nbsp;</th>
+                <th><a sort="Title">Project Title</a></th>
+                <th><a sort="Type">Type</a></th>
+                <th class="width-40"><a data-toggle="tooltip" title="Total Issues" sort="TotalIssues">Issues</a></th>
+                <th><a sort="OwnerAlias">Project Lead</a></th>
+                <th><a sort="CreatedDate">Date Created</a></th>
+                <th>&nbsp;</th>
+            </tr>
+
+            @if (Model.Items.Count() == 0)
+            {
+                <tr><td colspan="9" class="no-items">No items to display</td></tr>
+            }
+
+            @foreach (var item in Model.Items)
+            {
+                <tr>
+                    <td class="text-center">@(index++)</td>
+                    <td><a class="table-list-link" href="/projects/@item.Id?tab=issues">@item.Title</a></td>
+                    <td>@item.Type</td>
+                    <td><aggregate value="item.TotalIssues" href="/issues?AdvancedFilter=True&projectid=@item.Id"></aggregate></td>
+                    <td><a class="table-list-link" href="/people/@item.OwnerId">@item.OwnerAlias</a></td>
+                    <td>@item.CreatedDate</td>
+                    <td class='text-right'>
+                        <a class="btn btn-xs btn-light" href="/projects/edit/@item.Id">Edit</a>&nbsp;
+                        <a class="btn btn-xs btn-light js-delete" href="/projects/delete" data-id="@item.Id"
+                            data-dependencies="@item.TotalIssues">Delete</a>&nbsp; &nbsp;
+                    </td>
+
+                </tr>
+            }
+        </table>
+
+        <partial name="_Pager" />
+
+    </div>
+
+</form>
+
+<br />
+<br />
+<br />
+<br />
+
+@section Scripts
+{
+    <script>
+
+        $(function () {
+
+            FlightsNamespace.Utils.Typeahead.init("OwnerId", @Html.Raw(Typeahead.Owners));
+
+        });
+
+    </script>
+}
+

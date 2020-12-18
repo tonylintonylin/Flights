@@ -1,0 +1,80 @@
+@model Flights.Application.Issues.Edit
+@{
+    var title = Model.Id == 0 ? "New Issue" : "Edit: " + Model.Title;
+    ViewBag.Title = title;
+}
+
+<form method="post" asp-antiforgery="true">
+
+    <input type="hidden" asp-for="Id" />
+    <input type="hidden" asp-for="Referer" />
+
+    <div class="page-box">
+        <div class="page-box-icon"><a href="/issues"><i class="@Cache.IssueIcon"></i></a> Issue</div>
+        <div class="page-box-name">@title</div>
+    </div>
+
+    <div class="edit-pane">
+        <div class="row edit-pane-row ">
+
+            <div class="col-12 col-md-6">
+                <inputTextBox value="Title" label="Issue Title"></inputTextBox>
+                <inputTextArea value="Description"></inputTextArea>
+            </div>
+
+            <div class="col-12 col-md-6">
+                @if (Model.Id == 0)
+                {
+                    <outputField value="OwnerName" label="Assigner"></outputField>
+                    <input type="hidden" asp-for="OwnerId" />
+                }
+                else
+                {
+                    <inputSearch value="OwnerId" label="Assigner" placeholder="Search People.."></inputSearch>
+                }
+                <inputSearch value="AssigneeId" label="Assign to" placeholder="Search People.."></inputSearch>
+                <inputSearch value="ProjectId" label="Project" placeholder="Search Projects.."></inputSearch>
+                <inputDropDown value="Type" items="@Lookup.IssueTypes"></inputDropDown>
+                <inputDropDown value="Priority" items="@Lookup.IssuePriorities"></inputDropDown>
+                <inputDropDown value="Status" items="@Lookup.IssueStatuses"></inputDropDown>
+            </div>
+
+        </div>
+    </div>
+
+    <div class="button-bar">
+        <input type="submit" class="btn btn-sm btn-light" value=' Save ' />&nbsp;&nbsp;
+        <a class="btn btn-sm btn-light" href="@Model.Referer">Cancel</a>
+    </div>
+
+</form>
+
+<br />
+<br />
+<br />
+<br />
+
+@section Scripts
+    {
+    <script>
+
+        $(function () {
+
+            FlightsNamespace.Utils.Typeahead.init("ProjectId", @Html.Raw(Typeahead.Projects));
+            FlightsNamespace.Utils.Typeahead.init("OwnerId", @Html.Raw(Typeahead.Owners));
+            FlightsNamespace.Utils.Typeahead.init("AssigneeId", @Html.Raw(Typeahead.Owners));
+
+        });
+
+    </script>
+}
+
+
+
+
+
+
+
+
+
+

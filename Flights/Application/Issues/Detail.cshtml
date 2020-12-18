@@ -1,0 +1,78 @@
+@model Flights.Application.Issues.Detail
+@{ 
+    ViewBag.Title = "Issue Details";
+    // Add total history changes
+}
+
+<div class="page-box d-flex">
+
+    <div>
+        <div class="page-box-icon"><a href="/issues"><i class="@Cache.IssueIcon"></i></a> Issue</div>
+        <div class="page-box-name">@Model.Title</div>
+    </div>
+
+    <div class="d-flex">
+        <div class=" page-box-data-first">Status<br />@Model.Status</div>
+        <div class=" page-box-data">Type<br />@Model.Type</div>
+        <div class=" page-box-data-last">Created On<br />@Model.CreatedDate</div>
+    </div>
+    <div class="ml-auto">
+        <div class="page-box-buttons">
+            <a class="btn btn-sm btn-light js-edit" href="/issues/edit/@Model.Id">Edit</a>
+            <a class="btn btn-sm btn-light js-delete" href="/issues/delete" data-return-url="/issues" data-id="@Model.Id">Delete</a>
+               @* data-dependencies="@Model.TotalIssues">Delete</a>*@
+        </div>
+    </div>
+</div>
+
+<div class="tabs">
+    <ul class="nav nav-tabs nav-tabs-related">
+        <li class='nav-item'><a class='nav-link @(Model.Tab == "details" ? "active" : "")' data-toggle="tab" href="#details">Details</a></li>
+        @* @* <li class='nav-item'><a class='nav-link @(Model.Tab == "attachments" ? "active" : "")' data-toggle="tab" href="#attachments">Attachments</a></li> *@
+        <li class='nav-item'><a class='nav-link @(Model.Tab == "history" ? "active" : "")' data-toggle="tab" href="#history">History</a></li>
+        @* <li class='nav-item'><a class='nav-link @(Model.Tab == "comments" ? "active" : "")' data-toggle="tab" href="#comments">Comments</a></li> *@
+        @* <li class='nav-item'><a class='nav-link @(Model.Tab == "issues" ? "active" : "")' data-toggle="tab" href="#issues">Issues @(Html.Raw(issues))</a></li> *@
+    </ul>
+</div>
+
+<div class="tab-content">
+
+    <div class='tab-pane @(Model.Tab == "details" ? "active" : "")' id="details">
+        <div class="tab-pane-row row">
+
+            <div class="col-12 col-md-6">
+                <outputLink value="OwnerId" name="OwnerName" type="Owner" label="Assigner"></outputLink>
+                <outputLink value="ProjectId" name="ProjectTitle" type="Project" label="In Project"></outputLink>
+                <outputField value="Title"></outputField>
+                <outputField value="Description"></outputField>
+            </div>
+
+            <div class="col-12 col-md-6">
+                <outputLink value="AssigneeId" name="AssigneeName" type="Owner" label="Assigned to"></outputLink>
+                <outputField value="Type" label="Type"></outputField>
+                <outputField value="Priority" label="Priority"></outputField>
+                <outputField value="Status" label="Status"></outputField>
+                <outputField value="CreatedDate" label="Created On"></outputField>
+            </div>
+        </div>
+    </div> 
+
+    <div class='tab-pane @(Model.Tab == "history" ? "active" : "")' id="history">
+        <partial name="_IssueHistory" />
+    </div>
+
+</div>
+
+<br />
+<br />
+<br />
+<br />
+
+@section Scripts
+    {
+    <script>
+        $(function () {
+
+        });
+    </script>
+}

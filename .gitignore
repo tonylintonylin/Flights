@@ -1,0 +1,8 @@
+*.mdf
+*.ldf
+*.cache
+*.dll
+*.exe
+*.pdb
+*.g.cs
+*.sql

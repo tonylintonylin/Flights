@@ -1,0 +1,72 @@
+﻿@model Flights.Application.Auth.Login
+@{
+    ViewBag.Title = "Login";
+}
+
+<div class="container-fluid bg-light d-sm-flex">
+    <div class="text-center w-sm-50 height-500">
+        <img src="~/images/login.png" class="pt-45 pb-80" />
+
+        <div class="width-lg-350 m-auto p-15 bg-white border rounded">
+            <form method="post" asp-antiforgery="true" class="text-left">
+
+                <input type="hidden" asp-for="ReturnUrl" />
+
+                <div class="py-7">Email</div>
+                <input type="text" asp-for="Email" class="form-control" placeholder="Email" />
+                <span asp-validation-for="Email"></span>
+                
+                <div class="pt-15 pb-7">Password</div>
+                <input type="password" asp-for="Password" class="form-control" placeholder="Password" />
+                <span asp-validation-for="Password"></span>
+
+                <input class="btn btn-primary btn-block mt-25" type="submit" value="Log in" />
+                
+                <div class="mt-15"><a href="/forgot">Forgot your password?</a></div>
+            </form>
+        </div>
+    </div>
+
+    <div class="col-8">
+        <div class="row">
+            <div class="col-11 pl-30 py-10 font-weight-bold">
+                To quickly login, click on any of the user cards below.
+            </div>
+        </div>
+        <div class="py-20 px-15 mr-30">
+            @foreach (var user in Model.Users)
+            {
+                @await Html.PartialAsync("_User", user)
+            }
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+
+    <script type="text/javascript">
+
+        FlightsNamespace.namespace("Local").Page = (function () {
+
+            var start = function () {
+
+                $('.login-card').on('click', function () {
+      
+                    $('#Email').val($(this).data('email'));
+                    $('#Password').val($(this).data('pwd'));
+
+                    $('#login-button').addClass('disabled').attr("disabled", true);
+
+                    $('form').submit();
+                });
+            };
+
+            return { start: start };
+        })();
+
+
+        $(function () {
+            FlightsNamespace.Local.Page.start();
+        });
+    </script>
+}

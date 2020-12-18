@@ -1,0 +1,54 @@
+@model Flights.Application._Related._Issues
+
+<div class="d-flex related-header">
+    <div class="related-icon"><i class="@Cache.IssueIcon"></i></div>
+    <div class="related-text">Issues</div>
+    <div class="related-viewall">
+        @if (Model.TotalIssues > 6)
+        {
+            <a href="/issues?AdvancedFilter=True&@Model.ParentIdName=@Model.ParentId">View All</a>
+        }
+    </div>
+
+    @* <div class="ml-auto related-new"><a class="btn btn-sm btn-light" href="/issues/edit?@(Model.ParentIdName)Id=@(Model.ParentId)&@(Model.ParentIdName)Title=@(Model.ParentName)"> New </a></div> *@
+    <div class="ml-auto related-new"><a class="btn btn-sm btn-light" href="/issues/edit?@(Model.ParentIdName)=@(Model.ParentId)"> New </a></div>
+</div>
+
+<div class="related-items">
+    @if (Model.Issues.Count == 0)
+    {
+        @:No issues here
+    }
+    else
+    {
+        <div class="row">
+            @* @foreach (var item in Model.Issues) *@
+            @foreach (var item in Model.Issues)
+            {
+                <div class="col-3 mr-100 related-item">
+                    <div class="pb-4"><a class="underline" href="/issues/@item.Id?tab=details">@item.Title</a></div>
+                    <table class="table-related">
+                        <tr>
+                            <td class="w-30">Type:</td>
+                            <td class="w-70">@item.Type</td>
+                        </tr>
+                        <tr>
+                            <td>Status:</td>
+                            <td>@item.Status</td>
+                        </tr>
+                        <tr>
+                            <td>Priority:</td>
+                            <td>@item.Priority</td>
+                        </tr>
+                        <tr>
+                            <td colspan="2" class="py-15">
+                                <a class="btn btn-xs btn-light" href="/issues/edit/@item.Id">Edit</a>&nbsp;
+                                <a class="btn btn-xs btn-light js-delete" href="/issues/delete" data-id="@item.Id">Delete</a>&nbsp; &nbsp;
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            }
+        </div>
+    }
+</div>

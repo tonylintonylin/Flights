@@ -1,0 +1,66 @@
+﻿<div class="main-menu d-flex">
+    <div class="pt-10 px-15">
+        <a href="/home"><img src="~/images/logo.png" style="height:25px;" /></a>
+    </div>
+
+    <div class="">
+        <ul class="nav nav-menu">
+            <li class='nav-item'><a class='nav-link @(ViewBag.Menu == "Home" ? "active" : "")' href="/home">Home</a></li>
+            <li class='nav-item'><a class='nav-link @(ViewBag.Menu == "Projects" ? "active" : "")' href="/Projects">Projects</a></li>
+            <li class='nav-item'><a class='nav-link @(ViewBag.Menu == "Issues" ? "active" : "")' href="/Issues">Issues</a></li>
+            <li class='nav-item'><a class='nav-link @(ViewBag.Menu == "People" ? "active" : "")' href="/people">People</a></li>
+        </ul>
+    </div>
+    <div class="ml-auto d-flex" >
+        <div class="pt-11 pr-15">
+            <div class="dropdown">
+                <a class="no-underline" href="javascript:void(0);" data-toggle="dropdown">
+                    <span class="action-circle ml-40">
+                        <i class="text-white font-15 icon-plus"></i>
+                    </span>&nbsp;
+                </a>
+                <div class="dropdown-menu dropdown-menu-right">
+                    <a class="dropdown-item" href="/projects/edit">New Project</a>
+                    <a class="dropdown-item" href="/issues/edit">New Issue</a>
+                </div>
+            </div>
+        </div>
+        <div>
+            @if (CurrentUser.IsAdmin)
+            {
+                <div class="pt-10">
+                    <a class="no-underline" href="/admin">
+                        <span class="action-circle">
+                            <i class="text-white font-15 icon-settings" title="Admin"></i>
+                        </span>&nbsp;
+                    </a>
+                </div>
+            }
+        </div>
+        <div>
+            <div class="dropdown mr-15">
+                <a class="no-underline avatar-wrapper" data-toggle="dropdown" href="javascript:void(0);">
+                    <div class="action-circle mt-3">@CurrentUser.FirstLetter</div>
+                </a>
+                <div class="dropdown-menu dropdown-menu-right">
+                    <a class="dropdown-item disabled pl-5" href="/account">
+                        <div class="d-flex">
+                            <div class="p-5 pr-10">
+                                <div class="avatar" style="background:#36B37E;">@CurrentUser.FirstLetter</div>
+                            </div>
+                            <div>
+                                <div>@CurrentUser.Name</div>
+                                <div class="font-12">@CurrentUser.Email</div>
+                            </div>
+                        </div>
+                    </a>
+                    <div class="dropdown-divider"></div>
+                    <a class="dropdown-item" href="/account">My Account</a>
+                    <div class="dropdown-divider"></div>
+                    <a class="dropdown-item" href="/logout">Logout</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

@@ -7,7 +7,7 @@ namespace Flights.API
 {
     // ** Command Query pattern
 
-    public class BookingList
+    public class List
     {
         // Input
 
@@ -50,8 +50,6 @@ namespace Flights.API
 
         public class QueryHandler : RequestHandler<Query, Output>
         {
-            // ** DI Pattern
-
             private readonly FlightsContext _db;
             private readonly ICache _cache;
 
@@ -78,8 +76,6 @@ namespace Flights.API
                     var flight = _cache.Flights[booking.FlightId];
                     var traveler = _cache.Travelers[booking.TravelerId];
                     var seat = _cache.Seats[booking.SeatId];
-
-                    // ** Data Mapping pattern
 
                     result.Bookings.Add(new Output.Booking
                     {

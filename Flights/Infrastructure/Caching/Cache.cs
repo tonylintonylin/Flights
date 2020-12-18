@@ -19,9 +19,30 @@ namespace Flights
         string UserIcon { get; }
         string PeopleIcon { get; }
 
+        // Flights
+
+        Dictionary<int, Seat> Seats { get; }
+        void AddSeat(Seat seat);
+        void UpdateSeat(Seat seat);
+        void DeleteSeat(Seat seat);
+        void ClearSeats();
+
+        Dictionary<int, Traveler> Travelers { get; }
+        void AddTraveler(Traveler traveler);
+        void UpdateTraveler(Traveler traveler);
+        void DeleteTraveler(Traveler traveler);
+        void ClearTravelers();
+
+        Dictionary<int, Flight> Flights { get; }
+        void AddFlight(Flight flight);
+        void UpdateFlight(Flight flight);
+        void DeleteFlight(Flight flight);
+        void ClearFlights();
+
+        // Jello
+
         Dictionary<int, Project> Projects { get; }
         Dictionary<int, Issue> Issues { get; }
-
         Dictionary<int, User> Users { get; }
 
         void ClearProjects();
@@ -62,6 +83,11 @@ namespace Flights
 
         private static object locker = new object();
         private static object mocker = new object(); // modifying locker
+
+        private static readonly string PlanesKey = nameof(PlanesKey);
+        private static readonly string SeatsKey = nameof(SeatsKey);
+        private static readonly string TravelersKey = nameof(TravelersKey);
+        private static readonly string FlightsKey = nameof(FlightsKey);
 
         private const string ProjectsKey = nameof(ProjectsKey);
         private const string IssuesKey = nameof(IssuesKey);
@@ -112,6 +138,163 @@ namespace Flights
         public string AdminIcon { get { return MetaTypes["Admin"].Icon; } }
         public string UserIcon { get { return MetaTypes["User"].Icon; } }
         public string PeopleIcon { get { return MetaTypes["People"].Icon; } }
+
+        #endregion
+
+        #region Seats
+
+        public Dictionary<int, Seat> Seats
+        {
+            get
+            {
+                // ** Lazy Load pattern 
+
+                if (!(_memoryCache.Get(SeatsKey) is Dictionary<int, Seat> dictionary))
+                {
+                    lock (locker)
+                    {
+                        dictionary = _db.Seat.ToDictionary(a => a.Id);
+                        Add(SeatsKey, dictionary, DateTime.Now.AddHours(24));
+                    }
+                }
+
+                return dictionary;
+            }
+        }
+
+        public void AddSeat(Seat seat)
+        {
+            lock (locker)
+            {
+                if (!Seats.ContainsKey(seat.Id))
+                    Seats.Add(seat.Id, seat);
+            }
+        }
+
+        public void UpdateSeat(Seat seat)
+        {
+            lock (locker)
+            {
+                Seats[seat.Id] = seat;
+            }
+        }
+
+        public void DeleteSeat(Seat seat)
+        {
+            lock (locker)
+            {
+                Seats.Remove(seat.Id);
+            }
+        }
+
+        public void ClearSeats()
+        {
+            Clear(SeatsKey);
+        }
+
+        #endregion
+
+        #region Travelers
+
+        public Dictionary<int, Traveler> Travelers
+        {
+            get
+            {
+                // ** Lazy Load pattern 
+
+                if (!(_memoryCache.Get(TravelersKey) is Dictionary<int, Traveler> dictionary))
+                {
+                    lock (locker)
+                    {
+                        dictionary = _db.Traveler.ToDictionary(a => a.Id);
+                        Add(TravelersKey, dictionary, DateTime.Now.AddHours(4));
+                    }
+                }
+
+                return dictionary;
+            }
+        }
+
+        public void AddTraveler(Traveler traveler)
+        {
+            lock (locker)
+            {
+                if (!Travelers.ContainsKey(traveler.Id))
+                    Travelers.Add(traveler.Id, traveler);
+            }
+        }
+
+        public void UpdateTraveler(Traveler traveler)
+        {
+            lock (locker)
+            {
+                Travelers[traveler.Id] = traveler;
+            }
+        }
+
+        public void DeleteTraveler(Traveler traveler)
+        {
+            lock (locker)
+            {
+                Travelers.Remove(traveler.Id);
+            }
+        }
+
+        public void ClearTravelers()
+        {
+            Clear(TravelersKey);
+        }
+
+        #endregion
+
+        #region Flights
+
+        public Dictionary<int, Flight> Flights
+        {
+            get
+            {
+                if (!(_memoryCache.Get(FlightsKey) is Dictionary<int, Flight> dictionary))
+                {
+                    lock (locker)
+                    {
+                        dictionary = _db.Flight.ToDictionary(a => a.Id);
+                        Add(FlightsKey, dictionary, DateTime.Now.AddHours(4));
+                    }
+                }
+
+                return dictionary;
+            }
+        }
+
+        public void AddFlight(Flight flight)
+        {
+            lock (locker)
+            {
+                if (!Flights.ContainsKey(flight.Id))
+                    Flights.Add(flight.Id, flight);
+            }
+        }
+
+        public void UpdateFlight(Flight flight)
+        {
+            lock (locker)
+            {
+                Flights[flight.Id] = flight;
+            }
+        }
+
+        public void DeleteFlight(Flight flight)
+        {
+            lock (locker)
+            {
+                Flights.Remove(flight.Id);
+            }
+        }
+
+        public void ClearFlights()
+        {
+            Clear(FlightsKey);
+        }
 
         #endregion
 

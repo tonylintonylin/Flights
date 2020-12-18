@@ -1,55 +1,55 @@
-using Flights.Domain;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using System.Linq;
-using System.Threading.Tasks;
+// using Flights.Domain;
+// using Microsoft.AspNetCore.Mvc;
+// using Microsoft.EntityFrameworkCore;
+// using System.Linq;
+// using System.Threading.Tasks;
 
-namespace Flights.Application.Issues
-{
-    public class Delete : BaseModel
-    {
-        #region Data
+// namespace Flights.Application.Issues
+// {
+//     public class Delete : BaseModel
+//     {
+//         #region Data
 
-        public int Id { get; set; }
+//         public int Id { get; set; }
 
-        #endregion
+//         #endregion
 
-        #region Handlers
+//         #region Handlers
 
-        public override async Task<IActionResult> PostAsync()
-        {
-            var history = _db.IssueHistory.Where(s => s.IssueId == Id);
-            foreach (var row in history)
-            {
-                _db.IssueHistory.Remove(row);
-            }
+//         public override async Task<IActionResult> PostAsync()
+//         {
+//             var history = _db.IssueHistory.Where(s => s.IssueId == Id);
+//             foreach (var row in history)
+//             {
+//                 _db.IssueHistory.Remove(row);
+//             }
 
-            await _db.SaveChangesAsync();
+//             await _db.SaveChangesAsync();
 
-            var issue = await _db.Issue.SingleOrDefaultAsync(c => c.Id == Id);
+//             var issue = await _db.Issue.SingleOrDefaultAsync(c => c.Id == Id);
 
-            _db.Issue.Remove(issue);
-            await _db.SaveChangesAsync();
+//             _db.Issue.Remove(issue);
+//             await _db.SaveChangesAsync();
 
-            await SettleDeleteAsync(issue);
+//             await SettleDeleteAsync(issue);
 
-            return Json(true);
-        }
+//             return Json(true);
+//         }
 
-        #endregion
+//         #endregion
 
-        #region Helpers
+//         #region Helpers
 
-        private async Task SettleDeleteAsync(Issue issue)
-        {
-            _cache.DeleteIssue(issue);
-            await _db.Database.ExecuteSqlInterpolatedAsync(
-                $"DELETE FROM Viewed WHERE WhatId = {issue.Id} AND WhatType = 'Issue';");
+//         private async Task SettleDeleteAsync(Issue issue)
+//         {
+//             _cache.DeleteIssue(issue);
+//             await _db.Database.ExecuteSqlInterpolatedAsync(
+//                 $"DELETE FROM Viewed WHERE WhatId = {issue.Id} AND WhatType = 'Issue';");
 
-            await _rollup.RollupProjectAsync(issue.ProjectId);
-            await _rollup.RollupUserAsync(issue.OwnerId);
-        }
+//             await _rollup.RollupProjectAsync(issue.ProjectId);
+//             await _rollup.RollupUserAsync(issue.OwnerId);
+//         }
 
-        #endregion
-    }
-}
+//         #endregion
+//     }
+// }

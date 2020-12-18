@@ -11,15 +11,18 @@ namespace Flights.Domain
 
         public FlightsContext(DbContextOptions<FlightsContext> options) : base(options) { }
         
-        public virtual DbSet<Issue> Issue { get; set; }
-        public virtual DbSet<Project> Project { get; set; }
-        public virtual DbSet<IssueHistory> IssueHistory { get; set; }
-
+        public virtual DbSet<Booking> Booking { get; set; }
         public virtual DbSet<Error> Error { get; set; }
+        public virtual DbSet<Flight> Flight { get; set; }
+        public virtual DbSet<History> History { get; set; }
+        public virtual DbSet<Issue> Issue { get; set; }
         public virtual DbSet<Login> Login { get; set; }
-        public virtual DbSet<Viewed> Viewed { get; set; }
-
+        public virtual DbSet<Plane> Plane { get; set; }
+        public virtual DbSet<Project> Project { get; set; }
+        public virtual DbSet<Seat> Seat { get; set; }
+        public virtual DbSet<Traveler> Traveler { get; set; }
         public virtual DbSet<User> User { get; set; }
+        public virtual DbSet<Viewed> Viewed { get; set; }
 
         public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = new CancellationToken())
         {
